@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>331</height>
+    <width>746</width>
+    <height>344</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,9 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,3,0,0,3,0,0,3,0,0,3,0,2">
+     <property name="spacing">
+      <number>3</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="font">
@@ -30,7 +33,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="a_0"/>
+      <widget class="QDoubleSpinBox" name="a_0">
+       <property name="font">
+        <font>
+         <family>Verdana</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -59,7 +69,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="a_1"/>
+      <widget class="QDoubleSpinBox" name="a_1">
+       <property name="font">
+        <font>
+         <family>Verdana</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -88,7 +105,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="a_2"/>
+      <widget class="QDoubleSpinBox" name="a_2">
+       <property name="font">
+        <font>
+         <family>Verdana</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">
@@ -117,7 +141,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="a_3"/>
+      <widget class="QDoubleSpinBox" name="a_3">
+       <property name="font">
+        <font>
+         <family>Verdana</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_4">
@@ -133,9 +164,9 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="calculate">
        <property name="text">
-        <string>PushButton</string>
+        <string>Calculate</string>
        </property>
       </widget>
      </item>
