@@ -15,7 +15,9 @@ public:
 private:
 	Ui::GUIClass ui;
 	QTableWidgetItem *m_last_selected;
+	size_t m_seed;
 
 private slots:
 	void calculate();
+	void new_seed();
 };

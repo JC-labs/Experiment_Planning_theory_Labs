@@ -1,11 +1,14 @@
 #include "GUI.h"
 #include "qpushbutton.h"
 #include <random>
+#include <limits>
 
-GUI::GUI(QWidget *parent) : QWidget(parent), m_last_selected(nullptr)
-{
+GUI::GUI(QWidget *parent) : QWidget(parent), m_last_selected(nullptr) {
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, this, &GUI::calculate);
+	connect(ui.new_seed, &QPushButton::clicked, this, &GUI::new_seed);
+
+	m_seed = std::random_device()();
 }
 
 GUI::~GUI() {
@@ -15,7 +18,7 @@ void GUI::calculate() {
 	const double minimum_value = 0.0;
 	const double maximum_value = 20.0;
 	using Matrix = double[3][8];
-	std::mt19937_64 g;
+	std::mt19937_64 g(m_seed);
 	std::uniform_real_distribution<double> d(minimum_value,
 											 maximum_value);
 	double a[4];
@@ -31,8 +34,16 @@ void GUI::calculate() {
 		}
 
 	Matrix m, m0;
-	double min[3]{maximum_value, maximum_value, maximum_value};
-	double max[3]{minimum_value, minimum_value, minimum_value};
+	double min[3]{
+		std::numeric_limits<double>::max(), 
+		std::numeric_limits<double>::max(), 
+		std::numeric_limits<double>::max()
+	};
+	double max[3]{
+		std::numeric_limits<double>::min(), 
+		std::numeric_limits<double>::min(), 
+		std::numeric_limits<double>::min()
+	};
 	for (size_t i = 0; i < 3; i++) {
 		for (size_t j = 0; j < 8; j++) {
 			m[i][j] = d(g);
@@ -66,8 +77,8 @@ void GUI::calculate() {
 	ui.table->item(8, 3)->setText(QString::number(sum_y /= 8.0));
 
 	double res_y[8];
-	size_t res;
-	double min_res = maximum_value;
+	size_t res = 0;
+	double min_res = std::numeric_limits<double>::max();
 	for (size_t i = 0; i < 8; i++) {
 		res_y[i] = y[i] - sum_y;
 		res_y[i] *= res_y[i];
@@ -82,4 +93,9 @@ void GUI::calculate() {
 	auto br = m_last_selected->foreground();
 	br.setColor(QColor(100, 0, 100));
 	m_last_selected->setForeground(br);
+}
+
+void GUI::new_seed() {
+	m_seed = std::random_device()();
+	calculate();
 }

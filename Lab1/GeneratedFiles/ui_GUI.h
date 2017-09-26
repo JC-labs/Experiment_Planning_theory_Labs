@@ -42,7 +42,9 @@ public:
     QLabel *label_3;
     QDoubleSpinBox *a3;
     QSpacerItem *horizontalSpacer_4;
+    QVBoxLayout *verticalLayout_2;
     QPushButton *calculate;
+    QPushButton *new_seed;
     QTableWidget *table;
 
     void setupUi(QWidget *GUIClass)
@@ -144,16 +146,26 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer_4);
 
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         calculate = new QPushButton(GUIClass);
         calculate->setObjectName(QStringLiteral("calculate"));
 
-        horizontalLayout->addWidget(calculate);
+        verticalLayout_2->addWidget(calculate);
+
+        new_seed = new QPushButton(GUIClass);
+        new_seed->setObjectName(QStringLiteral("new_seed"));
+
+        verticalLayout_2->addWidget(new_seed);
+
+
+        horizontalLayout->addLayout(verticalLayout_2);
 
         horizontalLayout->setStretch(1, 3);
         horizontalLayout->setStretch(4, 3);
         horizontalLayout->setStretch(7, 3);
         horizontalLayout->setStretch(10, 3);
-        horizontalLayout->setStretch(12, 2);
 
         verticalLayout->addLayout(horizontalLayout);
 
@@ -244,6 +256,7 @@ public:
         label_2->setText(QApplication::translate("GUIClass", "a\342\202\202 = ", Q_NULLPTR));
         label_3->setText(QApplication::translate("GUIClass", "a\342\202\203 = ", Q_NULLPTR));
         calculate->setText(QApplication::translate("GUIClass", "Calculate", Q_NULLPTR));
+        new_seed->setText(QApplication::translate("GUIClass", "New seed", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem = table->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("GUIClass", "x\342\202\201", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem1 = table->horizontalHeaderItem(1);
