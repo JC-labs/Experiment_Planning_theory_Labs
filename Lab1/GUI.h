@@ -12,4 +12,7 @@ public:
 
 private:
 	Ui::GUIClass ui;
+
+private slots:
+	void calculate();
 };
