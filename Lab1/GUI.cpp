@@ -1,20 +1,85 @@
 #include "GUI.h"
 #include "qpushbutton.h"
+#include <random>
 
-GUI::GUI(QWidget *parent)
-	: QWidget(parent)
+GUI::GUI(QWidget *parent) : QWidget(parent), m_last_selected(nullptr)
 {
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, this, &GUI::calculate);
+}
 
-	ui.table-
+GUI::~GUI() {
 }
 
 void GUI::calculate() {
-	auto a0 = ui.a0->value();
-	auto a1 = ui.a1->value();
-	auto a2 = ui.a2->value();
-	auto a3 = ui.a3->value();
+	const double minimum_value = 0.0;
+	const double maximum_value = 20.0;
+	using Matrix = double[3][8];
+	std::mt19937_64 g;
+	std::uniform_real_distribution<double> d(minimum_value,
+											 maximum_value);
+	double a[4];
+	a[0] = ui.a0->value();
+	a[1] = ui.a1->value();
+	a[2] = ui.a2->value();
+	a[3] = ui.a3->value();
 
+	for (size_t i = 0; i < 7; i++)
+		for (size_t j = 0; j < 10; j++) {
+			if (ui.table->item(j, i)) delete ui.table->item(j, i);
+			ui.table->setItem(j, i, new QTableWidgetItem());
+		}
 
+	Matrix m, m0;
+	double min[3]{maximum_value, maximum_value, maximum_value};
+	double max[3]{minimum_value, minimum_value, minimum_value};
+	for (size_t i = 0; i < 3; i++) {
+		for (size_t j = 0; j < 8; j++) {
+			m[i][j] = d(g);
+			ui.table->item(j, i)->setText(QString::number(m[i][j]));
+		}
+		for (size_t j = 0; j < 8; j++) {
+			if (m[i][j] > max[i])
+				max[i] = m[i][j];
+			if (m[i][j] < min[i])
+				min[i] = m[i][j];
+		}
+		for (size_t j = 0; j < 8; j++) {
+			m0[i][j] = m[i][j] / (maximum_value - minimum_value) * 2.0 - 1.0;
+			ui.table->item(j, i + 4)->setText(QString::number(m0[i][j]));
+		}
+
+		ui.table->item(8, i)->setText(QString::number((max[i] + min[i]) / 2.0));
+		ui.table->item(9, i)->setText(QString::number((max[i] - min[i]) / 2.0));
+	}
+
+	double y[8];
+	double sum_y = 0.0;
+	for (size_t j = 0; j < 8; j++) {
+		y[j] = a[0];
+		for (size_t i = 0; i < 3; i++) {
+			y[j] += m[i][j] * a[i + 1];
+		}
+		ui.table->item(j, 3)->setText(QString::number(y[j]));
+		sum_y += y[j];
+	}
+	ui.table->item(8, 3)->setText(QString::number(sum_y /= 8.0));
+
+	double res_y[8];
+	size_t res;
+	double min_res = maximum_value;
+	for (size_t i = 0; i < 8; i++) {
+		res_y[i] = y[i] - sum_y;
+		res_y[i] *= res_y[i];
+		if (res_y[i] < min_res) {
+			min_res = res_y[i];
+			res = i;
+		}
+	}
+	if (m_last_selected) 
+		m_last_selected->setForeground(ui.table->item(0, 0)->foreground());
+	m_last_selected = ui.table->item(res, 3);
+	auto br = m_last_selected->foreground();
+	br.setColor(QColor(100, 0, 100));
+	m_last_selected->setForeground(br);
 }
