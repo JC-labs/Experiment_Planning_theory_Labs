@@ -27,7 +27,7 @@ void GUI::calculate() {
 	a[2] = ui.a2->value();
 	a[3] = ui.a3->value();
 
-	for (size_t i = 0; i < 7; i++)
+	for (size_t i = 0; i < 8; i++)
 		for (size_t j = 0; j < 10; j++) {
 			if (ui.table->item(j, i)) delete ui.table->item(j, i);
 			ui.table->setItem(j, i, new QTableWidgetItem());
@@ -63,22 +63,22 @@ void GUI::calculate() {
 	}
 
 	double y[8];
-	double sum_y = 0.0;
+	double std_y[8];
 	for (size_t j = 0; j < 8; j++) {
 		y[j] = a[0];
 		for (size_t i = 0; i < 3; i++) {
 			y[j] += m[i][j] * a[i + 1];
+			std_y[j] += m0[i][j] * a[i + 1];
 		}
 		ui.table->item(j, 3)->setText(QString::number(y[j]));
-		sum_y += y[j];
+		ui.table->item(j, 7)->setText(QString::number(std_y[j]));
 	}
-	ui.table->item(8, 3)->setText(QString::number(sum_y /= 8.0));
 
 	double res_y[8];
 	size_t res = 0;
 	double min_res = std::numeric_limits<double>::max();
 	for (size_t i = 0; i < 8; i++) {
-		res_y[i] = y[i] - sum_y;
+		res_y[i] = y[i] - std_y[i];
 		res_y[i] *= res_y[i];
 		if (res_y[i] < min_res) {
 			min_res = res_y[i];

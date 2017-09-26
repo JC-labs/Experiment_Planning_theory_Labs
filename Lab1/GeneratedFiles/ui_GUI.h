@@ -51,7 +51,7 @@ public:
     {
         if (GUIClass->objectName().isEmpty())
             GUIClass->setObjectName(QStringLiteral("GUIClass"));
-        GUIClass->resize(691, 414);
+        GUIClass->resize(694, 414);
         GUIClass->setMinimumSize(QSize(691, 384));
         verticalLayout = new QVBoxLayout(GUIClass);
         verticalLayout->setSpacing(6);
@@ -170,8 +170,8 @@ public:
         verticalLayout->addLayout(horizontalLayout);
 
         table = new QTableWidget(GUIClass);
-        if (table->columnCount() < 7)
-            table->setColumnCount(7);
+        if (table->columnCount() < 8)
+            table->setColumnCount(8);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         table->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -186,41 +186,43 @@ public:
         table->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
         table->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
+        table->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         if (table->rowCount() < 10)
             table->setRowCount(10);
-        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
-        __qtablewidgetitem7->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(0, __qtablewidgetitem7);
         QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
         __qtablewidgetitem8->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(1, __qtablewidgetitem8);
+        table->setVerticalHeaderItem(0, __qtablewidgetitem8);
         QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
         __qtablewidgetitem9->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(2, __qtablewidgetitem9);
+        table->setVerticalHeaderItem(1, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         __qtablewidgetitem10->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(3, __qtablewidgetitem10);
+        table->setVerticalHeaderItem(2, __qtablewidgetitem10);
         QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
         __qtablewidgetitem11->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(4, __qtablewidgetitem11);
+        table->setVerticalHeaderItem(3, __qtablewidgetitem11);
         QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
         __qtablewidgetitem12->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(5, __qtablewidgetitem12);
+        table->setVerticalHeaderItem(4, __qtablewidgetitem12);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
         __qtablewidgetitem13->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(6, __qtablewidgetitem13);
+        table->setVerticalHeaderItem(5, __qtablewidgetitem13);
         QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
         __qtablewidgetitem14->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(7, __qtablewidgetitem14);
+        table->setVerticalHeaderItem(6, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
         __qtablewidgetitem15->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        table->setVerticalHeaderItem(8, __qtablewidgetitem15);
-        QFont font2;
-        font2.setItalic(true);
+        table->setVerticalHeaderItem(7, __qtablewidgetitem15);
         QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
         __qtablewidgetitem16->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
-        __qtablewidgetitem16->setFont(font2);
-        table->setVerticalHeaderItem(9, __qtablewidgetitem16);
+        table->setVerticalHeaderItem(8, __qtablewidgetitem16);
+        QFont font2;
+        font2.setItalic(true);
+        QTableWidgetItem *__qtablewidgetitem17 = new QTableWidgetItem();
+        __qtablewidgetitem17->setTextAlignment(Qt::AlignTrailing|Qt::AlignVCenter);
+        __qtablewidgetitem17->setFont(font2);
+        table->setVerticalHeaderItem(9, __qtablewidgetitem17);
         table->setObjectName(QStringLiteral("table"));
         QFont font3;
         font3.setFamily(QStringLiteral("Verdana"));
@@ -235,7 +237,7 @@ public:
         table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
         table->setShowGrid(true);
         table->setCornerButtonEnabled(false);
-        table->horizontalHeader()->setDefaultSectionSize(91);
+        table->horizontalHeader()->setDefaultSectionSize(80);
         table->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
         table->verticalHeader()->setVisible(true);
         table->verticalHeader()->setStretchLastSection(false);
@@ -271,26 +273,28 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("GUIClass", "x\341\264\264\342\202\202", Q_NULLPTR));
         QTableWidgetItem *___qtablewidgetitem6 = table->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("GUIClass", "x\341\264\264\342\202\203", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem7 = table->verticalHeaderItem(0);
-        ___qtablewidgetitem7->setText(QApplication::translate("GUIClass", "1", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem8 = table->verticalHeaderItem(1);
-        ___qtablewidgetitem8->setText(QApplication::translate("GUIClass", "2", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem9 = table->verticalHeaderItem(2);
-        ___qtablewidgetitem9->setText(QApplication::translate("GUIClass", "3", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem10 = table->verticalHeaderItem(3);
-        ___qtablewidgetitem10->setText(QApplication::translate("GUIClass", "4", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem11 = table->verticalHeaderItem(4);
-        ___qtablewidgetitem11->setText(QApplication::translate("GUIClass", "5", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem12 = table->verticalHeaderItem(5);
-        ___qtablewidgetitem12->setText(QApplication::translate("GUIClass", "6", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem13 = table->verticalHeaderItem(6);
-        ___qtablewidgetitem13->setText(QApplication::translate("GUIClass", "7", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem14 = table->verticalHeaderItem(7);
-        ___qtablewidgetitem14->setText(QApplication::translate("GUIClass", "8", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem15 = table->verticalHeaderItem(8);
-        ___qtablewidgetitem15->setText(QApplication::translate("GUIClass", "x\342\202\200", Q_NULLPTR));
-        QTableWidgetItem *___qtablewidgetitem16 = table->verticalHeaderItem(9);
-        ___qtablewidgetitem16->setText(QApplication::translate("GUIClass", "dx", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem7 = table->horizontalHeaderItem(7);
+        ___qtablewidgetitem7->setText(QApplication::translate("GUIClass", "y\341\264\264", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem8 = table->verticalHeaderItem(0);
+        ___qtablewidgetitem8->setText(QApplication::translate("GUIClass", "1", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem9 = table->verticalHeaderItem(1);
+        ___qtablewidgetitem9->setText(QApplication::translate("GUIClass", "2", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem10 = table->verticalHeaderItem(2);
+        ___qtablewidgetitem10->setText(QApplication::translate("GUIClass", "3", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem11 = table->verticalHeaderItem(3);
+        ___qtablewidgetitem11->setText(QApplication::translate("GUIClass", "4", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem12 = table->verticalHeaderItem(4);
+        ___qtablewidgetitem12->setText(QApplication::translate("GUIClass", "5", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem13 = table->verticalHeaderItem(5);
+        ___qtablewidgetitem13->setText(QApplication::translate("GUIClass", "6", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem14 = table->verticalHeaderItem(6);
+        ___qtablewidgetitem14->setText(QApplication::translate("GUIClass", "7", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem15 = table->verticalHeaderItem(7);
+        ___qtablewidgetitem15->setText(QApplication::translate("GUIClass", "8", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem16 = table->verticalHeaderItem(8);
+        ___qtablewidgetitem16->setText(QApplication::translate("GUIClass", "x\342\202\200", Q_NULLPTR));
+        QTableWidgetItem *___qtablewidgetitem17 = table->verticalHeaderItem(9);
+        ___qtablewidgetitem17->setText(QApplication::translate("GUIClass", "dx", Q_NULLPTR));
     } // retranslateUi
 
 };
