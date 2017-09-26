@@ -3,7 +3,6 @@
 #include <QtWidgets/QWidget>
 #include "ui_GUI.h"
 
-class QTableWidgetItem;
 class GUI : public QWidget
 {
 	Q_OBJECT
@@ -14,7 +13,6 @@ public:
 
 private:
 	Ui::GUIClass ui;
-	QTableWidgetItem *m_last_selected;
 	size_t m_seed;
 
 private slots:

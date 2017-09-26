@@ -51,7 +51,7 @@ public:
     {
         if (GUIClass->objectName().isEmpty())
             GUIClass->setObjectName(QStringLiteral("GUIClass"));
-        GUIClass->resize(691, 384);
+        GUIClass->resize(691, 414);
         GUIClass->setMinimumSize(QSize(691, 384));
         verticalLayout = new QVBoxLayout(GUIClass);
         verticalLayout->setSpacing(6);

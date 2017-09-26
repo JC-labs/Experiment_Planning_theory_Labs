@@ -3,7 +3,7 @@
 #include <random>
 #include <limits>
 
-GUI::GUI(QWidget *parent) : QWidget(parent), m_last_selected(nullptr) {
+GUI::GUI(QWidget *parent) : QWidget(parent) {
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, this, &GUI::calculate);
 	connect(ui.new_seed, &QPushButton::clicked, this, &GUI::new_seed);
@@ -48,16 +48,14 @@ void GUI::calculate() {
 		for (size_t j = 0; j < 8; j++) {
 			m[i][j] = d(g);
 			ui.table->item(j, i)->setText(QString::number(m[i][j]));
+			m0[i][j] = m[i][j] / (maximum_value - minimum_value) * 2.0 - 1.0;
+			ui.table->item(j, i + 4)->setText(QString::number(m0[i][j]));
 		}
 		for (size_t j = 0; j < 8; j++) {
 			if (m[i][j] > max[i])
 				max[i] = m[i][j];
 			if (m[i][j] < min[i])
 				min[i] = m[i][j];
-		}
-		for (size_t j = 0; j < 8; j++) {
-			m0[i][j] = m[i][j] / (maximum_value - minimum_value) * 2.0 - 1.0;
-			ui.table->item(j, i + 4)->setText(QString::number(m0[i][j]));
 		}
 
 		ui.table->item(8, i)->setText(QString::number((max[i] + min[i]) / 2.0));
@@ -87,12 +85,9 @@ void GUI::calculate() {
 			res = i;
 		}
 	}
-	if (m_last_selected) 
-		m_last_selected->setForeground(ui.table->item(0, 0)->foreground());
-	m_last_selected = ui.table->item(res, 3);
-	auto br = m_last_selected->foreground();
+	auto br = ui.table->item(res, 3)->foreground();
 	br.setColor(QColor(100, 0, 100));
-	m_last_selected->setForeground(br);
+	ui.table->item(res, 3)->setForeground(br);
 }
 
 void GUI::new_seed() {
