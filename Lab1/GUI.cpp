@@ -48,7 +48,7 @@ void GUI::calculate() {
 		for (size_t j = 0; j < 8; j++) {
 			m[i][j] = d(g);
 			ui.table->item(j, i)->setText(QString::number(m[i][j]));
-			m0[i][j] = m[i][j] / (maximum_value - minimum_value) * 2.0 - 1.0;
+			m0[i][j] = m[i][j] / (maximum_value - minimum_value) * 2.0 - 1.0;	
 			ui.table->item(j, i + 4)->setText(QString::number(m0[i][j]));
 		}
 		for (size_t j = 0; j < 8; j++) {
@@ -58,8 +58,9 @@ void GUI::calculate() {
 				min[i] = m[i][j];
 		}
 
-		ui.table->item(8, i)->setText(QString::number((max[i] + min[i]) / 2.0));
-		ui.table->item(9, i)->setText(QString::number((max[i] - min[i]) / 2.0));
+		auto x0 = (max[i] + min[i]) / 2.0;
+		ui.table->item(8, i)->setText(QString::number(x0));
+		ui.table->item(9, i)->setText(QString::number((max[i] - x0) / 2.0));
 	}
 
 	double y[8];
@@ -86,7 +87,7 @@ void GUI::calculate() {
 		}
 	}
 	auto br = ui.table->item(res, 3)->foreground();
-	br.setColor(QColor(100, 0, 100));
+	br.setColor(QColor(255, 0, 255));
 	ui.table->item(res, 3)->setForeground(br);
 }
 
