@@ -84,7 +84,6 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		std::vector<Three> y;
 		size_t m = 2;
 
-		Three sigma(0.f);
 		bool one_more_time;
 		Matrix f, theta, r;
 		do {
@@ -98,6 +97,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 				}
 			}
 
+			Three sigma(0.f);
 			for (size_t i = 0; i < 3; i++) {
 				float y_av = 0;
 				for (size_t j = 0; j < m; j++)
