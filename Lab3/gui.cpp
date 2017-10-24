@@ -62,6 +62,15 @@ Number t_test(size_t m) {
 		return t_table[30];
 }
 
+Number f_table[] = {224.6, 19.3, 9.1, 6.4, 5.2, 4.5, 4.1, 3.8, 3.6, 3.5, 3.4, 3.3, 3.2, 3.1, 3, 3, 2.9, 2.9,
+	2.8, 2.8, 2.7, 2.7, 2.7, 2.6, 2.5, 2.5, 2.4};
+Number f_test(size_t f3, size_t f4) {
+	if (f3 < 30 && f3 > 0)
+		return f_table[f3];
+	else
+		return f_table[30];
+}
+
 gui::gui(QWidget *parent) : QWidget(parent) {
 	auto lambda = [this]() {
 		Matrix x{ Array{ +1, 10, 25, 40 }, Array{ +1, 10, 25, 45 }, Array{ +1, 10, 45, 45 }, Array{ +1, 40, 45, 45 } };
@@ -83,7 +92,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		bool one_more_time;
 		float y_av = 0;
 		Number sigma_max = 0.f, sigma_sum = 0.f;
-		do {
+		non_adequate: do {
 			increment(m);
 			ui.table->setColumnCount(m + Array_Size);
 			for (size_t j = y.size(); j < m; j++) {
@@ -190,6 +199,15 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 														m2, a12, a22, a2,
 														m3, a13, a23, a3 })
 			/ def_det;
+
+		Number sigma_ad = 0.f, sigma_s = 0.f;
+		for (size_t j = 0; j < Array_Size; j++)
+			sigma_ad += (b0 + b1 * x[j][0] + b2 * x[j][1] + b3 * x[j][2]) - y_av;
+		sigma_ad *= m / d_c;
+
+		Number f = sigma_ad / sigma_av;
+		if (f > f_test((m - 1) * Array_Size, d_c))
+			goto non_adequate;
 		
 		std::stringstream s1, s2;
 		s1 << "y = (" << b0 << ") + (" << b1 << ") * x1 + (" << b2 << ") * x2 + (" << b3 << ") * x3;\n";
