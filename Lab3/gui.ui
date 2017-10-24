@@ -21,48 +21,11 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,5">
-     <property name="spacing">
-      <number>3</number>
+    <widget class="QPushButton" name="calculate">
+     <property name="text">
+      <string>recalculate</string>
      </property>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="font">
-        <font>
-         <family>Verdana</family>
-         <pointsize>12</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Confidence:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="confidence">
-       <item>
-        <property name="text">
-         <string>0.90</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0.95</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0.98</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>0.99</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-    </layout>
+    </widget>
    </item>
    <item>
     <widget class="QTableWidget" name="table">
