@@ -188,31 +188,6 @@
        <string>x0*x1*x2</string>
       </property>
      </column>
-     <column>
-      <property name="text">
-       <string>y0</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>y1</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>y2</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>m_y</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>D_y</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>
