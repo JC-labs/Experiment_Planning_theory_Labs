@@ -9,28 +9,43 @@ void draw(QTableWidget *table, size_t i, size_t j, Number value) {
 	table->item(i, j)->setTextAlignment(Qt::AlignHCenter);
 }
 
-constexpr size_t Exp = 8u;
 constexpr size_t Var = 3u;
 constexpr Array<Var> x_min = {-30, +15, +20};
 constexpr Array<Var> x_max = {+20, +50, +35};
 constexpr Number y_max = 200 + Number(x_max[0] + x_max[1] + x_max[2]) / 3;
 constexpr Number y_min = 200 + Number(x_min[0] + x_min[1] + x_min[2]) / 3;
 constexpr Array<Var> dx = {(x_max[0] - x_min[0]) / 2, (x_max[1] - x_min[1]) / 2, (x_max[2] - x_min[2]) / 2};
-constexpr Array<Var> d0 = {(x_max[0] + x_min[0]) / 2, (x_max[1] + x_min[1]) / 2, (x_max[2] + x_min[2]) / 2};
+constexpr Array<Var> x0 = {(x_max[0] + x_min[0]) / 2, (x_max[1] + x_min[1]) / 2, (x_max[2] + x_min[2]) / 2};
 constexpr size_t Y_Shift = Var * 4 + 1;
+constexpr size_t p = 0;
+constexpr size_t n0 = 1;
+constexpr size_t Exp = ipow(2, Var - p) + Var * 2 + n0;
+const Number L = sqrt(sqrt(ipow(2, Var - p - 2) * (ipow(2, Var - p) + Var * 2 + 1)) - ipow(2, Var - p - 1));
 std::uniform_real_distribution<float> d(y_min, y_max);
 
 #include <sstream>
 gui::gui(QWidget *parent) : QWidget(parent) {
 	auto lambda = [this]() {
-		Matrix<Exp, Var> x{Experiment<Var>{-30, +15, +20}, Experiment<Var>{-30, +15, +35},
-			Experiment<Var>{-30, +50, +20}, Experiment<Var>{-30, +50, +35},
-			Experiment<Var>{+20, +15, +20}, Experiment<Var>{+20, +15, +35},
-			Experiment<Var>{+20, +50, +20}, Experiment<Var>{+20, +50, +35}};
-		Matrix<Exp, Var> xn{Experiment<Var>{-1, -1, -1}, Experiment<Var>{-1, -1, +1},
+		Matrix<Exp, Var> x {
+			Experiment<Var>{x_min[0], x_min[1], x_min[2]}, Experiment<Var>{x_min[0], x_min[1], x_max[2]},
+			Experiment<Var>{x_min[0], x_max[1], x_min[2]}, Experiment<Var>{x_min[0], x_max[1], x_max[2]},
+			Experiment<Var>{x_max[0], x_min[1], x_min[2]}, Experiment<Var>{x_max[0], x_min[1], x_max[2]},
+			Experiment<Var>{x_max[0], x_max[1], x_min[2]}, Experiment<Var>{x_max[0], x_max[1], x_max[2]},
+			Experiment<Var>{-L * dx[0] + x0[0], x0[1], x0[2]}, Experiment<Var>{+L * dx[0] + x0[0], x0[1], x0[2]},
+			Experiment<Var>{x0[0], -L * dx[1] + x0[1], x0[2]}, Experiment<Var>{x0[0], +L * dx[1] + x0[1], x0[2]},
+			Experiment<Var>{x0[0], x0[1], -L * dx[2] + x0[2]}, Experiment<Var>{x0[0], x0[1], +L * dx[2] + x0[2]},
+			Experiment<Var>{x0[0], x0[1], x0[2]}
+		};
+		Matrix<Exp, Var> xn{
+			Experiment<Var>{-1, -1, -1}, Experiment<Var>{-1, -1, +1},
 			Experiment<Var>{-1, +1, -1}, Experiment<Var>{-1, +1, +1},
 			Experiment<Var>{+1, -1, -1}, Experiment<Var>{+1, -1, +1},
-			Experiment<Var>{+1, +1, -1}, Experiment<Var>{+1, +1, +1}};
+			Experiment<Var>{+1, +1, -1}, Experiment<Var>{+1, +1, +1},
+			Experiment<Var>{-L, 0, 0}, Experiment<Var>{+L, 0, 0},
+			Experiment<Var>{0, -L, 0}, Experiment<Var>{0, +L, 0},
+			Experiment<Var>{0, 0, -L}, Experiment<Var>{0, 0, +L},
+			Experiment<Var>{0, 0, 0}
+		};
 		Matrix<Exp, Var> xxn = xn;
 		Array<Exp> xxxn;
 		Matrix<Exp, Var> x2n = xn;
@@ -49,7 +64,6 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			draw(ui.table, j, 2 + Var * 2 + 1, xxxn[j]);
 			for (size_t i = 0; i < Var; i++) {
 				x2n[j][i] = xn[j][i] * xn[j][i];
-				draw(ui.table, j, i, x2n[j][i]);
 				draw(ui.table, j, i + Var * 3 + 1, x2n[j][i]);
 			}
 		}
@@ -83,7 +97,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			sigma_sum += sigma[j];
 		}
 		Number g = sigma_max / sigma_sum;
-		one_more_time = g > q_test(m);
+		one_more_time = g * 50 > q_test(m);
 		} while (one_more_time);
 
 		Number sigma_av = sigma_sum / Var;
@@ -148,6 +162,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			}
 			bi[i] /= Exp;
 			bi2[i] /= Exp;
+			bi2[i] /= dx[i];
 		}
 		Number b0 = 0.f;
 		Experiment<Var> bii = fillExperiment<Var>(0.f);
@@ -178,16 +193,16 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			goto non_adequate;
 
 		Number b0_ = b0
-			- bi[0] * d0[0] / dx[0]
-			- bi[1] * d0[1] / dx[1]
-			- bi[2] * d0[2] / dx[2]
-			- bii[0] * d0[0] / dx[0] * d0[1] / dx[1]
-			- bii[1] * d0[1] / dx[1] * d0[2] / dx[2]
-			- bii[2] * d0[0] / dx[0] * d0[2] / dx[2]
-			- biii * d0[0] / dx[0] * d0[1] / dx[1] * d0[2] / dx[2]
-			- bi[0] * d0[0] / dx[0] * d0[0] / dx[0]
-			- bi[1] * d0[1] / dx[1] * d0[1] / dx[1]
-			- bi[2] * d0[2] / dx[2] * d0[2] / dx[2];
+			- bi[0] * x0[0] / dx[0]
+			- bi[1] * x0[1] / dx[1]
+			- bi[2] * x0[2] / dx[2]
+			- bii[0] * x0[0] / dx[0] * x0[1] / dx[1]
+			- bii[1] * x0[1] / dx[1] * x0[2] / dx[2]
+			- bii[2] * x0[0] / dx[0] * x0[2] / dx[2]
+			- biii * x0[0] / dx[0] * x0[1] / dx[1] * x0[2] / dx[2]
+			- bi[0] * x0[0] / dx[0] * x0[0] / dx[0]
+			- bi[1] * x0[1] / dx[1] * x0[1] / dx[1]
+			- bi[2] * x0[2] / dx[2] * x0[2] / dx[2];
 
 		Experiment<Var> bi_ = fillExperiment<Var>(0.f);
 		Experiment<Var> bi2_ = fillExperiment<Var>(0.f);
@@ -213,7 +228,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			<< biii_ << ") * x0 * x1 * x2 + (" << bi2_[0] << ") * x0 * x0 + (" << bi2_[1] << ") * x1 * x1 + ("
 			<< bi2_[2] << ") * x2 * x2" << ";";
 		ui.res->setText(QString::fromStdString(s1.str()));
-		ui.res_2->setText(QString::fromStdString(s2.str()));
+		ui.res_2->setText(QString::fromStdString(s2.str()));//*/
 	};
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, lambda);
