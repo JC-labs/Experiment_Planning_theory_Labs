@@ -81,15 +81,36 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		
 		size_t d_c = Var;
 		
-		Experiment<Var> beta = fillExperiment<Var>(0.f);
-		for (size_t j = 0; j < Exp; j++)
+		Experiment<Var> beta_x = fillExperiment<Var>(0.f);
+		Experiment<Var> beta_xx = fillExperiment<Var>(0.f);
+		Number beta_xxx = 0.f;
+		for (size_t j = 0; j < Exp; j++) {
 			for (size_t i = 0; i < Var && i < m; i++)
-				beta[i] += y_av * xn[j][i];
-		Experiment<Var> t = fillExperiment<Var>(0.f);
+				beta_x[i] += y_av * xn[j][i];
+			beta_xx[0] += y_av * xn[j][0] * xn[j][1];
+			beta_xx[1] += y_av * xn[j][1] * xn[j][2];
+			beta_xx[2] += y_av * xn[j][0] * xn[j][2];
+			beta_xxx += y_av * xn[j][0] * xn[j][1] * xn[j][2];
+		}
+		Experiment<Var> tx = fillExperiment<Var>(0.f);
+		Experiment<Var> txx = fillExperiment<Var>(0.f);
+		Number txxx = 0.f;
 		for (size_t i = 0; i < Var && i < m; i++) {
-			t[i] = beta[i] / sigma_av;
-			if (t[i] > 0 && t[i] < t_test((m - 1) * Var))
+			tx[i] = beta_x[i] / sigma_av;
+			if (tx[i] > 0 && tx[i] < t_test((m - 1) * Var)) {
+				tx[i] = -1.f;
 				d_c--;
+			}
+			txx[i] = beta_xx[i] / sigma_av;
+			if (txx[i] > 0 && txx[i] < t_test((m - 1) * Var)) {
+				txx[i] = -1.f;
+				d_c--;
+			}
+			txxx = beta_xxx / sigma_av;
+			if (txxx > 0 && txxx < t_test((m - 1) * Var)) {
+				txxx = -1.f;
+				d_c--;
+			}
 		}
 		
 		Array<Exp> sy = fillExperiment<Exp>(0.f);
