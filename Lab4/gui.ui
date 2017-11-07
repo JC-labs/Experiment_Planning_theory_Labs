@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1246</width>
-    <height>414</height>
+    <width>1115</width>
+    <height>477</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>GUI</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,5,1,1">
    <item>
     <widget class="QPushButton" name="calculate">
      <property name="text">
@@ -191,7 +191,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="res">
+    <widget class="QTextEdit" name="res">
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="res_2">
      <property name="font">
       <font>
        <family>Verdana</family>

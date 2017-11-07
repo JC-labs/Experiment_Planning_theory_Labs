@@ -73,7 +73,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 				sigma_sum += sigma[j];
 			}
 			Number g = sigma_max / sigma_sum;
-			one_more_time = g > q_test(m);
+			one_more_time = g * 25 > q_test(m);
 		} while (one_more_time);
 		
 		Number sigma_av = sigma_sum / Var;
@@ -84,7 +84,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		Experiment<Var> beta = fillExperiment<Var>(0.f);
 		for (size_t j = 0; j < Exp; j++)
 			for (size_t i = 0; i < Var && i < m; i++)
-				beta[i] += y_av * x[j][i];
+				beta[i] += y_av * xn[j][i];
 		Experiment<Var> t = fillExperiment<Var>(0.f);
 		for (size_t i = 0; i < Var && i < m; i++) {
 			t[i] = beta[i] / sigma_av;
@@ -92,7 +92,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 				d_c--;
 		}
 		
-		Array<Exp> sy;
+		Array<Exp> sy = fillExperiment<Exp>(0.f);
 		for (size_t j = 0; j < Exp; j++) {
 			for (size_t i = 0; i < m; i++)
 				sy[j] += y[i][j];
@@ -102,7 +102,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		Experiment<Var> bi = fillExperiment<Var>(0.f);
 		for (size_t i = 0; i < Var && i < m; i++) {
 			for (size_t j = 0; j < Exp; j++)
-				bi[i] += sy[j] * x[j][i];
+				bi[i] += sy[j] * xn[j][i];
 			bi[i] /= Exp;
 		}
 		Number b0 = 0.f;
@@ -110,27 +110,59 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		Number biii = 0.f;
 		for (size_t j = 0; j < Exp; j++) {
 			b0 += sy[j];
-			bii[0] += sy[j] * x[j][0] * x[j][1];
-			bii[1] += sy[j] * x[j][1] * x[j][2];
-			bii[2] += sy[j] * x[j][0] * x[j][2];
-			biii += sy[j] * x[j][0] * x[j][1] * x[j][2];
+			bii[0] += sy[j] * xn[j][0] * xn[j][1];
+			bii[1] += sy[j] * xn[j][1] * xn[j][2];
+			bii[2] += sy[j] * xn[j][0] * xn[j][2];
+			biii += sy[j] * xn[j][0] * xn[j][1] * xn[j][2];
 		}
+		b0 /= Exp;
+		bii[0] /= Exp;
+		bii[1] /= Exp;
+		bii[2] /= Exp;
+		biii /= Exp;
 		Number sigma_ad = 0.f, sigma_s = 0.f;
 		for (size_t j = 0; j < Var; j++)
-			sigma_ad += (b0 + bi[0] * x[j][0] + bi[1] * x[j][1] + bi[2] * x[j][2]
-						 + bii[0] * x[j][0] * x[j][1] + bii[1] * x[j][1] * x[j][2]
-						 + bii[2] * x[j][0] * x[j][2] + biii * x[j][0] * x[j][1] * x[j][2]) - y_av;
+			sigma_ad += (b0 + bi[0] * xn[j][0] + bi[1] * xn[j][1] + bi[2] * xn[j][2]
+						 + bii[0] * xn[j][0] * xn[j][1] + bii[1] * xn[j][1] * xn[j][2]
+						 + bii[2] * xn[j][0] * xn[j][2] + biii * xn[j][0] * xn[j][1] * xn[j][2]) - y_av;
 		sigma_ad *= m / d_c;
 		
 		Number f = sigma_ad / sigma_av;
 		if (f > f_test((m - 1) * Var, d_c))
 			goto non_adequate;
+
+		constexpr Array<Var> dx = {(20 - (-30)) / 2, (50 - 15) / 2, (35 - 20) / 2};
+		constexpr Array<Var> d0 = {(20 + (-30)) / 2, (50 + 15) / 2, (35 + 20) / 2};
+
+		Number b0_ = b0
+			- bi[0] * d0[0] / dx[0]
+			- bi[1] * d0[1] / dx[1]
+			- bi[2] * d0[2] / dx[2]
+			- bii[0] * d0[0] / dx[0] * d0[1] / dx[1]
+			- bii[1] * d0[1] / dx[1] * d0[2] / dx[2]
+			- bii[2] * d0[0] / dx[0] * d0[2] / dx[2]
+			- biii * d0[0] / dx[0] * d0[1] / dx[1] * d0[2] / dx[2];
+
+		Experiment<Var> bi_ = fillExperiment<Var>(0.f);
+		for (size_t i = 0; i < Var; i++)
+			bi_[i] = bi[i] / dx[i];
+
+		Experiment<Var> bii_ = fillExperiment<Var>(0.f);
+		bii_[0] = bii[0] / dx[0] / dx[1];
+		bii_[1] = bii[1] / dx[1] / dx[2];
+		bii_[2] = bii[2] / dx[0] / dx[2];
+
+		Number biii_ = biii_ / dx[0] / dx[1] / dx[2];
 		
-		std::stringstream s1;
+		std::stringstream s1, s2;
 		s1 << "y = (" << b0 << ") + (" << bi[0] << ") * x0 + (" << bi[1] << ") * x1 + (" << bi[2] << ") * x2 + ("
 			<< bii[0] << ") * x0 * x1 + (" << bii[1] << ") * x1 * x2 + (" << bii[2] << ") * x0 * x2 + (" 
-			<< biii << ") * x0 * x1 * x2" << ";\n";
+			<< biii << ") * x0 * x1 * x2" << ";";
+		s2 << "y = (" << b0_ << ") + (" << bi_[0] << ") * x0 + (" << bi_[1] << ") * x1 + (" << bi_[2] << ") * x2 + ("
+			<< bii_[0] << ") * x0 * x1 + (" << bii_[1] << ") * x1 * x2 + (" << bii_[2] << ") * x0 * x2 + ("
+			<< biii_ << ") * x0 * x1 * x2" << ";";
 		ui.res->setText(QString::fromStdString(s1.str()));
+		ui.res_2->setText(QString::fromStdString(s2.str()));
 	};
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, lambda);
