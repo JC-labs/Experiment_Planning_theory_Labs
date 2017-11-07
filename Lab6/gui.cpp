@@ -12,16 +12,14 @@ void draw(QTableWidget *table, size_t i, size_t j, Number value) {
 constexpr size_t Var = 3u;
 constexpr Array<Var> x_min = {-30, +15, +20};
 constexpr Array<Var> x_max = {+20, +50, +35};
-constexpr Number y_max = 200 + Number(x_max[0] + x_max[1] + x_max[2]) / 3;
-constexpr Number y_min = 200 + Number(x_min[0] + x_min[1] + x_min[2]) / 3;
 constexpr Array<Var> dx = {(x_max[0] - x_min[0]) / 2, (x_max[1] - x_min[1]) / 2, (x_max[2] - x_min[2]) / 2};
 constexpr Array<Var> x0 = {(x_max[0] + x_min[0]) / 2, (x_max[1] + x_min[1]) / 2, (x_max[2] + x_min[2]) / 2};
 constexpr size_t Y_Shift = Var * 4 + 1;
 constexpr size_t p = 0;
-constexpr size_t n0 = 1;
+constexpr size_t n0 = 0;
 constexpr size_t Exp = ipow(2, Var - p) + Var * 2 + n0;
 const Number L = sqrt(sqrt(ipow(2, Var - p - 2) * (ipow(2, Var - p) + Var * 2 + 1)) - ipow(2, Var - p - 1));
-std::uniform_real_distribution<float> d(y_min, y_max);
+std::uniform_real_distribution<float> d(0.f, 10.f);
 
 #include <sstream>
 gui::gui(QWidget *parent) : QWidget(parent) {
@@ -33,8 +31,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			Experiment<Var>{x_max[0], x_max[1], x_min[2]}, Experiment<Var>{x_max[0], x_max[1], x_max[2]},
 			Experiment<Var>{-L * dx[0] + x0[0], x0[1], x0[2]}, Experiment<Var>{+L * dx[0] + x0[0], x0[1], x0[2]},
 			Experiment<Var>{x0[0], -L * dx[1] + x0[1], x0[2]}, Experiment<Var>{x0[0], +L * dx[1] + x0[1], x0[2]},
-			Experiment<Var>{x0[0], x0[1], -L * dx[2] + x0[2]}, Experiment<Var>{x0[0], x0[1], +L * dx[2] + x0[2]},
-			Experiment<Var>{x0[0], x0[1], x0[2]}
+			Experiment<Var>{x0[0], x0[1], -L * dx[2] + x0[2]}, Experiment<Var>{x0[0], x0[1], +L * dx[2] + x0[2]}
 		};
 		Matrix<Exp, Var> xn{
 			Experiment<Var>{-1, -1, -1}, Experiment<Var>{-1, -1, +1},
@@ -43,9 +40,18 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 			Experiment<Var>{+1, +1, -1}, Experiment<Var>{+1, +1, +1},
 			Experiment<Var>{-L, 0, 0}, Experiment<Var>{+L, 0, 0},
 			Experiment<Var>{0, -L, 0}, Experiment<Var>{0, +L, 0},
-			Experiment<Var>{0, 0, -L}, Experiment<Var>{0, 0, +L},
-			Experiment<Var>{0, 0, 0}
+			Experiment<Var>{0, 0, -L}, Experiment<Var>{0, 0, +L}
 		};
+		auto function = [](Number x0, Number x1, Number x2) -> Number {
+			return 11.f + 10.f * x0 + 9.f * x1 + 8.f * x2
+				+ 7.f * x0 * x1 + 6.f * x1 * x2 + 5.f * x0 * x2
+				+ 4.f * x0 * x1 * x2
+				+ 3.f * x0 * x0 + 2.f * x1 * x1 + 1.f * x2 * x2;
+		};
+		auto generator = [&function, &xn](size_t j) -> Number {
+			return function(xn[j][0], xn[j][1], xn[j][2]) + d(g) - 5.f;
+		};
+			
 		Matrix<Exp, Var> xxn = xn;
 		Array<Exp> xxxn;
 		Matrix<Exp, Var> x2n = xn;
@@ -78,7 +84,7 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 		ui.table->setColumnCount(m + Y_Shift);
 		for (size_t i = y.size(); i < m; i++) {
 			ui.table->setHorizontalHeaderItem(i + Y_Shift, new QTableWidgetItem("y" + QString::number(i)));
-			y.push_back(randomizeExperiment<Exp>(d));
+			y.push_back(generateExperiment<Exp>(generator));
 			for (size_t j = 0; j < Exp; j++)
 				draw(ui.table, j, i + Y_Shift, y[i][j]);
 		}

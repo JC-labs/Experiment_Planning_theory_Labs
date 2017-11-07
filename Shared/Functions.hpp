@@ -18,7 +18,8 @@ namespace shared {
 	template <size_t Variables, class Function>
 	Experiment<Variables> generateExperiment(Function function) {
 		Experiment<Variables> res;
-		for (size_t i = 0; i < Variables, i++) res[i] = function(i);
+		for (size_t i = 0; i < Variables; i++) 
+			res[i] = function(i);
 		return res;
 	}
 }
