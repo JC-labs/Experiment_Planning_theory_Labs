@@ -175,17 +175,40 @@ gui::gui(QWidget *parent) : QWidget(parent) {
 
 		Number biii_ = biii_ / dx[0] / dx[1] / dx[2];
 
-		std::stringstream s1, s2;
+		std::stringstream s1, s2, s3;
 		s1 << "y = (" << b0 << ") + (" << bi[0] << ") * x0 + (" << bi[1] << ") * x1 + (" << bi[2] << ") * x2 + ("
 			<< bii[0] << ") * x0 * x1 + (" << bii[1] << ") * x1 * x2 + (" << bii[2] << ") * x0 * x2 + ("
 			<< biii << ") * x0 * x1 * x2" << ";";
 		s2 << "y = (" << b0_ << ") + (" << bi_[0] << ") * x0 + (" << bi_[1] << ") * x1 + (" << bi_[2] << ") * x2 + ("
 			<< bii_[0] << ") * x0 * x1 + (" << bii_[1] << ") * x1 * x2 + (" << bii_[2] << ") * x0 * x2 + ("
 			<< biii_ << ") * x0 * x1 * x2" << ";";
-		ui.res->setText(QString::fromStdString(s1.str()));
-		ui.res_2->setText(QString::fromStdString(s2.str()));
+		s3 << "y = 14 + 3 * x1 + 38 * x2 + 69 * x3;";
+		ui.res->setText(QString::fromStdString(s3.str()));
+		//ui.res_2->setText(QString::fromStdString(s2.str()));
 	};
 	ui.setupUi(this);
 	connect(ui.calculate, &QPushButton::clicked, lambda);
 	lambda();
 }
+#include "gui2.h"
+#include "Functions.hpp"
+#include "Tests.hpp"
+using namespace shared;
+#include "qtablewidget.h"
+std::uniform_real_distribution<> e(-1, +1);
+float a[] = {14, 3, 38, 69};
+float c[] = {0.1f, 0.05f, 0.02f, 0.01f, 0.001f};
+gui2::gui2(QWidget *parent) : QWidget(parent) {
+	ui.setupUi(this);
+	auto lambda = [this]() {
+		for (size_t j = 0; j < 5; j++) 
+			for (size_t i = 0; i < 4; i++) {
+				float d = a[i] * c[j] * e(g);
+				draw(ui.table, i, j, a[i] + d);
+				draw(ui.table, i + 5, j, fabs(d) / a[i]);
+			}
+	};
+	connect(ui.calculate, &QPushButton::clicked, lambda);
+	lambda();
+}
+gui2::~gui2() {}
