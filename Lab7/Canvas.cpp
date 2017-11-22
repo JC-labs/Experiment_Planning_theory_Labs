@@ -19,7 +19,7 @@ void Canvas::initializeGL() {
 void Canvas::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
 	glLoadIdentity();
-	glOrtho(-5, +5, -5, +5, -5, +5);
+	glOrtho(-12, +12, -12, +12, -12, +12);
 }
 void Canvas::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -27,10 +27,10 @@ void Canvas::paintGL() {
 	//Coordinate System.
 	glBegin(GL_LINES);
 	glColor3f(0.25, 0.0, 0.45);
-	glVertex2f(-5, 0);
-	glVertex2f(+5, 0);
-	glVertex2f(0, -5);
-	glVertex2f(0, +5);
+	glVertex2f(-12, 0);
+	glVertex2f(+12, 0);
+	glVertex2f(0, -12);
+	glVertex2f(0, +12);
 	glEnd();
 
 	//Current simplex
