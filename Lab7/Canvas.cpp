@@ -3,6 +3,7 @@ size_t i = 4;
 bool success = false;
 Point opt;
 std::mt19937_64 g((std::random_device())());
+size_t last = 0;
 Canvas::Canvas(QWidget *parent) : QOpenGLWidget(parent), m_counters{0, 0, 0} {}
 Canvas::~Canvas() {}
 
@@ -72,15 +73,34 @@ Point shift(Value *s, Point const& a, Point const& b) {
 	return {cx, cy};
 }
 Point shift_simplex(Simplex &s, size_t *c) {
+	regenerate:
 	if (s.a.v < s.b.v && s.a.v < s.c.v) {
-		c[0] = 0; c[1]++; c[2]++;
-		return shift(&s.a, s.b, s.c);
+		if (last != 1) {
+			last = 1;
+			c[0] = 0; c[1]++; c[2]++;
+			return shift(&s.a, s.b, s.c);
+		} else {
+			s.a = Value(s.a.x, s.a.y, experiment(i++));
+			goto regenerate;
+		}
 	} else if (s.b.v < s.a.v && s.b.v < s.c.v) {
-		c[1] = 0; c[0]++; c[2]++;
-		return shift(&s.b, s.a, s.c);
+		if (last != 2) {
+			last = 2;
+			c[1] = 0; c[0]++; c[2]++;
+			return shift(&s.b, s.a, s.c);
+		} else {
+			s.b = Value(s.b.x, s.b.y, experiment(i++));
+			goto regenerate;
+		}
 	} else if (s.c.v < s.b.v && s.c.v < s.a.v) {
-		c[2] = 0; c[1]++; c[0]++;
-		return shift(&s.c, s.b, s.a);
+		if (last != 3) {
+			last = 3;
+			c[2] = 0; c[1]++; c[0]++;
+			return shift(&s.c, s.b, s.a);
+		} else {
+			s.c = Value(s.c.x, s.c.y, experiment(i++));
+			goto regenerate;
+		}
 	}
 }
 void Canvas::step() {
